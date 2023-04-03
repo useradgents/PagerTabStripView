@@ -105,7 +105,11 @@ private struct WrapperPagerTabStripView<Content>: View where Content: View {
                     }
                 }.onEnded { value in
                     guard swipeGestureEnabled else { return }
-                    let offset = value.predictedEndTranslation.width / gproxy.size.width
+                    var computeWidth = gproxy.size.width
+                    if computeWidth == 0 {
+                        computeWidth = 0.1
+                    }
+                    let offset = value.predictedEndTranslation.width / computeWidth
                     let newPredictedIndex = (CGFloat(selection) - offset).rounded()
                     let newIndex = min(max(Int(newPredictedIndex), 0), dataStore.itemsCount - 1)
                     if abs(selection - newIndex) > 1 {

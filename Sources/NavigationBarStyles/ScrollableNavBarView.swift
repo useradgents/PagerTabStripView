@@ -99,7 +99,11 @@ internal struct IndicatorScrollableBarView: View {
             }
             .onChange(of: settings.contentOffset) { newValue in
                 let offset = newValue + (settings.width * CGFloat(selection))
-                let percentage = offset / settings.width
+                var widthCompute = settings.width
+                if widthCompute == 0 {
+                    widthCompute = 0.1
+                }
+                let percentage = offset / widthCompute
                 let items = dataStore.items.filter { index, _ in
                     index < selection
                 }

@@ -13,17 +13,25 @@ internal struct IndicatorBarView<Indicator: View>: View {
 
     @ViewBuilder var indicator: Indicator
 
+    
+    func getDataCount() -> CGFloat {
+        var computeCount = CGFloat(dataStore.itemsCount)
+        if computeCount == 0 {
+            computeCount = CGFloat(0.1)
+        }
+        return computeCount
+    }
+    
     var body: some View {
         HStack {
             let totalItemWidth = (settings.width - (style.tabItemSpacing * CGFloat(dataStore.itemsCount - 1)))
-            let navBarItemWidth = totalItemWidth / CGFloat(dataStore.itemsCount)
-            if let width = navBarItemWidth, width > 0, width <= settings.width {
-                let x = -settings.contentOffset / CGFloat(dataStore.itemsCount) + width / 2
-
+            let navBarItemWidth = totalItemWidth / getDataCount()
+            if navBarItemWidth > 0, navBarItemWidth <= settings.width {
+                let x = -settings.contentOffset / getDataCount() + navBarItemWidth / 2
                 indicator
                     .foregroundColor(style.indicatorBarColor)
                     .animation(.default)
-                    .frame(width: width)
+                    .frame(width: navBarItemWidth)
                     .position(x: x, y: 0)
             }
         }

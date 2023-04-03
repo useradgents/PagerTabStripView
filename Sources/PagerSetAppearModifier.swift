@@ -21,7 +21,11 @@ struct PagerSetAppearItemModifier: ViewModifier {
                 .onAppear {
                     DispatchQueue.main.async {
                         let frame = reader.frame(in: .named("PagerViewScrollView"))
-                        index = Int(round(frame.minX / frame.width))
+                        var computeWidth = frame.width
+                        if computeWidth == 0 {
+                            computeWidth = 0.1
+                        }
+                        index = Int(round(frame.minX / computeWidth))
                         dataStore.setAppear(callback: onPageAppear, at: index)
                     }
                 }
